@@ -87,3 +87,7 @@ gradle-8.7-bin.zip
 setup_android_sdk.ps1
 build_apk.ps1
 process_logo.py
+
+# JARVIS Android app: Python repo ignore rules must not leak into it
+!Brahma-Ai-Evo-main/jarvis-android/**/tools/
+!Brahma-Ai-Evo-main/jarvis-android/**/tools/**
