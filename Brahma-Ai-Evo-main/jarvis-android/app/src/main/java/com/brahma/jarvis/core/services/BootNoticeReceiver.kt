@@ -28,7 +28,7 @@ class ReminderReceiver : BroadcastReceiver() {
             context, 5, Intent(context, com.brahma.jarvis.MainActivity::class.java),
             android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE)
         val n = androidx.core.app.NotificationCompat.Builder(context, "jarvis_reminders")
-            .setContentTitle("Brahma · Jarvis reminder")
+            .setContentTitle("Jarves reminder")
             .setContentText(text)
             .setSmallIcon(com.brahma.jarvis.R.drawable.ic_launcher_foreground)
             .setContentIntent(open)

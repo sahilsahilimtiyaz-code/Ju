@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Brahma</string>
+    <string name="app_name">Jarves</string>
     <string name="notif_mic_channel">Jarvis Live Voice</string>
     <string name="notif_wake_title">Tap to wake JARVIS</string>
     <string name="notif_wake_body">Always listening is off. Tap to open the app and start the microphone.</string>

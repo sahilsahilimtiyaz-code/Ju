@@ -57,7 +57,7 @@ fun BootScreen(onDone: () -> Unit) {
         Spacer(Modifier.height(90.dp))
         ReactorOrb(Modifier.size(190.dp), pulsing = true)
         Spacer(Modifier.height(22.dp))
-        Text("J. A. R. V. I. S.", color = Color.White, fontSize = 22.sp,
+        Text("J. A. R. V. E. S.", color = Color.White, fontSize = 22.sp,
             fontWeight = FontWeight.Light, fontFamily = FontFamily.Monospace, letterSpacing = 6.sp)
         Text("INITIALIZING SYSTEMS" + if (cursor > 0.5f) "." else "  ",
             color = Color(0xFF5E9FC4), fontSize = 11.sp, fontFamily = FontFamily.Monospace,
@@ -83,7 +83,7 @@ fun BootScreen(onDone: () -> Unit) {
             }
         }
         Spacer(Modifier.weight(1f))
-        Text("BRAHMA", color = Color(0xFF1F4A63), fontSize = 10.sp, fontFamily = FontFamily.Monospace)
+        Text("JARVES", color = Color(0xFF1F4A63), fontSize = 10.sp, fontFamily = FontFamily.Monospace)
         Spacer(Modifier.height(12.dp))
     }
 }

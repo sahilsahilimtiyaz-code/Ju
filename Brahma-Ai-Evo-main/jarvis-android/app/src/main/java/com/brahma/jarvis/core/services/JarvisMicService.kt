@@ -209,8 +209,8 @@ class JarvisMicService : Service() {
             Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         return NotificationCompat.Builder(this, CH_MIC)
-            .setContentTitle("Brahma · Jarvis listening")
-            .setContentText("Wake: \"hey jarvis\" · tap to open")
+            .setContentTitle("Jarves is listening")
+            .setContentText("Wake: \"hey jarves\" · tap to open")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
             .setContentIntent(open)

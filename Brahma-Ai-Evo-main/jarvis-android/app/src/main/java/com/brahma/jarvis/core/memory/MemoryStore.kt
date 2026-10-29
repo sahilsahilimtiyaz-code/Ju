@@ -31,10 +31,14 @@ class MemoryStore(context: Context) : SQLiteOpenHelper(context, dbFile(context),
         private fun ExecutorService.run2(body: () -> Unit): Future<*> = submit { body() }
     }
 
-    init { exec.run2 { writableDatabase.enableWriteAheadLogging() }.get() }
+    init {
+        // WAL toggle lives here, OUTSIDE any transaction (onCreate runs schema inside
+        // one, and SQLite refuses journal_mode changes within a transaction).
+        // Never let DB setup kill the app at startup.
+        runCatching { exec.run2 { writableDatabase.enableWriteAheadLogging() }.get() }
+    }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("PRAGMA journal_mode=WAL")
         db.execSQL("CREATE TABLE messages(rowid INTEGER PRIMARY KEY AUTOINCREMENT, ts INTEGER, role TEXT, text TEXT, session TEXT)")
         db.execSQL("CREATE TABLE facts(id INTEGER PRIMARY KEY AUTOINCREMENT, ts INTEGER, fact TEXT, category TEXT, confidence REAL, superseded INTEGER DEFAULT 0, sources TEXT)")
         db.execSQL("CREATE TABLE summaries(id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT, ts INTEGER, text TEXT)")

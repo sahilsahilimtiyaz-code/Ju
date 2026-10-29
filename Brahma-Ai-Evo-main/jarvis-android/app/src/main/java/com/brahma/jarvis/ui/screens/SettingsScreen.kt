@@ -140,7 +140,7 @@ fun MainSettings(onPage: (SettingsPage) -> Unit) {
                 }
             }
             item {
-                Text("About · Brahma v3.0 · J.A.R.V.I.S core (native)",
+                Text("About · Jarves v3.0 · J.A.R.V.E.S. core (native)",
                     color = TextDim, fontSize = 10.sp, fontFamily = FontFamily.Monospace)
             }
         }

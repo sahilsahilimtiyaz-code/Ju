@@ -104,7 +104,7 @@ fun QuickPanel(onClose: () -> Unit, onQuickAction: (String) -> Unit) {
             Text(if (status == "OFFLINE") "Standby" else "Active", color = ReactorCyan, fontSize = 10.sp)
         }
         Spacer(Modifier.weight(1f))
-        Text("BRAHMA · J.A.R.V.I.S.", color = TextDim, fontSize = 9.sp, fontFamily = FontFamily.Monospace)
+        Text("JARVES · J.A.R.V.E.S.", color = TextDim, fontSize = 9.sp, fontFamily = FontFamily.Monospace)
         Spacer(Modifier.height(8.dp))
     }
 }

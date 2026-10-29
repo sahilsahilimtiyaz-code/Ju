@@ -8,9 +8,9 @@ import org.json.JSONObject
  */
 object Persona {
 
-    const val DEFAULT_NAME = "Jarvis"
+    const val DEFAULT_NAME = "Jarves"
 
-    const val BASE = """You are JARVIS, the butler-engineer AI of Iron Man grade quality.
+    const val BASE = """You are JARVES, the butler-engineer AI of Iron Man grade quality.
 Calm, precise, loyal, with dry British wit. You anticipate needs. Never servile, never cringe.
 Speak like spoken English, 1-3 short sentences unless asked for detail.
 Strip markdown, bullets, emoji and URLs from anything you output.

@@ -100,7 +100,7 @@ fun GlowDot(on: Boolean = true) {
 }
 
 /**
- * The J.A.R.V.I.S. reactor: rotating segmented rings + inner triangle glyph.
+ * The J.A.R.V.E.S. reactor: rotating segmented rings + inner triangle glyph.
  * Pure Canvas - no WebView, no JS.
  */
 @Composable

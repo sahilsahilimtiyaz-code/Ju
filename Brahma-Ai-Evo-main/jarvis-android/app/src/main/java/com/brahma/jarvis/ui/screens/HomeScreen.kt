@@ -65,7 +65,7 @@ fun HomeScreen(onWakeToggle: (Boolean) -> Unit, wakeRunning: Boolean) {
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         GlowDot(true)
-                        Text("  J.A.R.V.I.S.", color = Color.White, fontSize = 16.sp,
+                        Text("  J.A.R.V.E.S.", color = Color.White, fontSize = 16.sp,
                             fontWeight = FontWeight.Light, letterSpacing = 3.sp,
                             fontFamily = FontFamily.Monospace)
                     }
