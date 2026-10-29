@@ -8,6 +8,9 @@ on:
       - 'Brahma-Ai-Evo-main/jarvis-android/**'
       - '.github/workflows/build-apk.yml'
 
+env:
+  ANDROID_HOME: /usr/local/lib/android/sdk
+
 jobs:
   build:
     name: Assemble APKs
@@ -21,8 +24,15 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Prepare Android SDK (preinstalled on runner)
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls "$ANDROID_HOME"
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKM" ] || SDKM="$(find "$ANDROID_HOME" -name sdkmanager -type f | head -1)"
+          echo "sdkmanager: $SDKM"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0" "platform-tools" > /dev/null
 
       - name: Gradle cache
         uses: actions/cache@v4
