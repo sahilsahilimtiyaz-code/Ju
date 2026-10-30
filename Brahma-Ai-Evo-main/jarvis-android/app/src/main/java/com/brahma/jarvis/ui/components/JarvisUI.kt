@@ -38,6 +38,7 @@ import com.brahma.jarvis.ui.theme.CyanLine
 import com.brahma.jarvis.ui.theme.GlowWhite
 import com.brahma.jarvis.ui.theme.PurpleAccent
 import com.brahma.jarvis.ui.theme.ReactorCyan
+import com.brahma.jarvis.ui.theme.RedAlert
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -115,6 +116,13 @@ fun ReactorOrb(modifier: Modifier = Modifier, pulsing: Boolean = false) {
     Canvas(modifier) {
         val cx = size.width / 2; val cy = size.height / 2
         val R = size.minDimension / 2.4f * pulse
+        // --- bloom: soft radial halos behind everything (the "glow") ---
+        drawCircle(brush = Brush.radialGradient(
+            listOf(ReactorCyan.copy(alpha = 0.26f), ReactorCyan.copy(alpha = 0.06f), Color.Transparent),
+            center = Offset(cx, cy), radius = R * 1.6f), radius = R * 1.6f, center = Offset(cx, cy))
+        drawCircle(brush = Brush.radialGradient(
+            listOf(GlowWhite.copy(alpha = 0.30f), ReactorCyan.copy(alpha = 0.10f), Color.Transparent),
+            center = Offset(cx, cy), radius = R * 0.9f), radius = R * 0.9f, center = Offset(cx, cy))
         // outer tick ring
         (0..71).forEach { i ->
             val a = Math.toRadians((i * 5).toDouble() + spin)
@@ -176,6 +184,79 @@ fun VoiceWave(modifier: Modifier, level: Float, active: Boolean) {
                 Brush.verticalGradient(listOf(ReactorCyan, PurpleAccent, ReactorCyan), endY = size.height),
                 Offset(x, mid - h), Offset(x, mid + h), strokeWidth = 3f, cap = StrokeCap.Round)
         }
+    }
+}
+
+/**
+ * HUD panel chrome: double hairline frame + corner brackets, the signature
+ * reference-UI detail around cards.
+ */
+@Composable
+fun HudFrame(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Box(modifier) {
+        Box(
+            Modifier.matchParentSize()
+                .clip(RoundedCornerShape(14.dp))
+                .background(Color(0xCC06121F))
+                .border(1.dp, CyanLine.copy(alpha = 0.9f), RoundedCornerShape(14.dp)))
+        Box(
+            Modifier.matchParentSize()
+                .padding(3.dp)
+                .clip(RoundedCornerShape(11.dp))
+                .border(1.dp, CyanLine.copy(alpha = 0.35f), RoundedCornerShape(11.dp)))
+        // corner brackets
+        androidx.compose.foundation.Canvas(Modifier.matchParentSize()) {
+            val len = 14f; val w = 2.5f; val c = ReactorCyan.copy(alpha = 0.95f)
+            drawLine(c, androidx.compose.ui.geometry.Offset(0f, 10f), androidx.compose.ui.geometry.Offset(0f, 10f + len), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(0f, 10f), androidx.compose.ui.geometry.Offset(10f + len, 10f), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(size.width, 10f), androidx.compose.ui.geometry.Offset(size.width, 10f + len), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(size.width, 10f), androidx.compose.ui.geometry.Offset(size.width - 10f - len, 10f), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(0f, size.height - 10f), androidx.compose.ui.geometry.Offset(0f, size.height - 10f - len), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(0f, size.height - 10f), androidx.compose.ui.geometry.Offset(10f + len, size.height - 10f), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(size.width, size.height - 10f), androidx.compose.ui.geometry.Offset(size.width, size.height - 10f - len), w)
+            drawLine(c, androidx.compose.ui.geometry.Offset(size.width, size.height - 10f), androidx.compose.ui.geometry.Offset(size.width - 10f - len, size.height - 10f), w)
+        }
+        Column(Modifier.padding(12.dp)) { content() }
+    }
+}
+
+/** Status dot with a breathing halo - used for LIVE / ONLINE indicators. */
+@Composable
+fun PulseDot(on: Boolean = true, base: Color = com.brahma.jarvis.ui.theme.GreenOk) {
+    val t = rememberInfiniteTransition(label = "dot")
+    val halo by t.animateFloat(0f, 1f,
+        infiniteRepeatable(tween(1100), RepeatMode.Reverse), label = "halo")
+    Box(Modifier.size(14.dp), contentAlignment = Alignment.Center) {
+        androidx.compose.foundation.Canvas(Modifier.size(14.dp)) {
+            if (on) drawCircle(base.copy(alpha = 0.35f * (1f - halo)), size.minDimension / 2f * (0.6f + halo))
+        }
+        Box(Modifier.size(7.dp).clip(RoundedCornerShape(4.dp)).background(if (on) base else RedAlert))
+    }
+}
+
+/** Glowing horizontal metric bar (CPU/MEMORY/STORAGE cards). */
+@Composable
+fun MetricBar(fraction: Float) {
+    val t = rememberInfiniteTransition(label = "bar")
+    val shimmer by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2400)), label = "sh")
+    Box(Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)).background(Color(0xFF0A2233))) {
+        Box(
+            Modifier.fillMaxWidth(fraction.coerceIn(0f, 1f)).height(4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(Brush.horizontalGradient(
+                    listOf(ReactorCyan, GlowWhite, ReactorCyan),
+                    startX = 0f, endX = 400f * shimmer)))
+    }
+}
+
+/** Boot screen glowing progress bar driven by [progress] 0f..1f. */
+@Composable
+fun BootProgress(progress: Float, modifier: Modifier = Modifier) {
+    Box(modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)).background(Color(0xFF0A2233))) {
+        Box(
+            Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(6.dp)
+                .clip(RoundedCornerShape(3.dp))
+                .background(Brush.horizontalGradient(listOf(CyanLine, ReactorCyan, GlowWhite))))
     }
 }
 

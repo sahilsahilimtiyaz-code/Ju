@@ -33,6 +33,9 @@ import androidx.compose.ui.unit.sp
 import com.brahma.jarvis.core.session.AssistantSession
 import com.brahma.jarvis.ui.components.GlowDot
 import com.brahma.jarvis.ui.components.HoloCard
+import com.brahma.jarvis.ui.components.HudFrame
+import com.brahma.jarvis.ui.components.MetricBar
+import com.brahma.jarvis.ui.components.PulseDot
 import com.brahma.jarvis.ui.components.ReactorOrb
 import com.brahma.jarvis.ui.components.SectionTitle
 import com.brahma.jarvis.ui.components.StatusChip
@@ -88,15 +91,16 @@ fun HomeScreen(onWakeToggle: (Boolean) -> Unit, wakeRunning: Boolean) {
         item {
             Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                StatBox(Modifier.weight(1f), "CPU", "12%", "47°C")
-                StatBox(Modifier.weight(1f), "MEMORY", "6%", "10.8/16 GB")
-                StatBox(Modifier.weight(1f), "STORAGE", "87%", "65 GB")
-                StatBox(Modifier.weight(1f), "STATUS", status.take(6), "mic")
+                StatBox(Modifier.weight(1f), "CPU", "12%", "47°C", 0.12f)
+                StatBox(Modifier.weight(1f), "MEMORY", "6%", "10.8/16 GB", 0.06f)
+                StatBox(Modifier.weight(1f), "STORAGE", "87%", "65 GB", 0.87f)
+                StatBox(Modifier.weight(1f), "STATUS", status.take(6), "mic",
+                    if (status == "LISTENING") 0.8f else 0.3f)
             }
         }
 
         item {
-            HoloCard {
+            HudFrame {
                 SectionTitle("MISSION LOG",
                     trailing = { Text("VIEW ALL >", color = TextDim, fontSize = 10.sp) })
                 Spacer(Modifier.height(8.dp))
@@ -111,13 +115,13 @@ fun HomeScreen(onWakeToggle: (Boolean) -> Unit, wakeRunning: Boolean) {
         }
 
         item {
-            HoloCard {
+            HudFrame {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     SectionTitle("LIVE TOOL FEED", trailing = null)
                     Spacer(Modifier.weight(1f))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("LIVE ", color = ReactorCyan, fontSize = 10.sp)
-                        GlowDot(feed.isNotEmpty() || status != "OFFLINE")
+                        PulseDot(on = feed.isNotEmpty() || status != "OFFLINE")
                     }
                 }
                 Spacer(Modifier.height(6.dp))
@@ -138,7 +142,7 @@ fun HomeScreen(onWakeToggle: (Boolean) -> Unit, wakeRunning: Boolean) {
         }
 
         item {
-            HoloCard {
+            HudFrame {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     SectionTitle("DIALOGUE", trailing = null)
                     Spacer(Modifier.weight(1f))
@@ -189,13 +193,16 @@ fun HomeScreen(onWakeToggle: (Boolean) -> Unit, wakeRunning: Boolean) {
 }
 
 @Composable
-private fun StatBox(modifier: Modifier = Modifier, label: String, value: String, sub: String) {
+private fun StatBox(modifier: Modifier = Modifier, label: String, value: String, sub: String,
+                    fraction: Float = 0.5f) {
     Column(modifier.clip(RoundedCornerShape(10.dp))
         .background(Color(0xCC06121F)).border(1.dp, CyanLine, RoundedCornerShape(10.dp))
         .padding(8.dp)) {
         Text(label, color = TextDim, fontSize = 9.sp, fontFamily = FontFamily.Monospace)
         Text(value, color = GlowWhite, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Text(sub, color = TextDim, fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Clip)
+        Spacer(Modifier.height(4.dp))
+        MetricBar(fraction)
     }
 }
 

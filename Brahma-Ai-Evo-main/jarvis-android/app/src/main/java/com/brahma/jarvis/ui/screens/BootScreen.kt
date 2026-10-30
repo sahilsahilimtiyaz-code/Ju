@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.brahma.jarvis.ui.components.BootProgress
 import com.brahma.jarvis.ui.components.ReactorOrb
 import com.brahma.jarvis.ui.theme.GlowWhite
 import com.brahma.jarvis.ui.theme.ReactorCyan
@@ -62,7 +63,12 @@ fun BootScreen(onDone: () -> Unit) {
         Text("INITIALIZING SYSTEMS" + if (cursor > 0.5f) "." else "  ",
             color = Color(0xFF5E9FC4), fontSize = 11.sp, fontFamily = FontFamily.Monospace,
             modifier = Modifier.padding(top = 6.dp))
-        Spacer(Modifier.height(34.dp))
+        Spacer(Modifier.height(14.dp))
+        BootProgress(
+            progress = (step + if (cursor > 0.5f) 1 else 0) / (BOOT_STEPS.size + 1f),
+            modifier = Modifier.fillMaxWidth(0.72f),
+        )
+        Spacer(Modifier.height(20.dp))
         Column(Modifier.fillMaxWidth(0.8f), horizontalAlignment = Alignment.Start) {
             BOOT_STEPS.forEachIndexed { i, s ->
                 Row(Modifier.fillMaxWidth().padding(vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
